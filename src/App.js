@@ -1,9 +1,13 @@
+import { useContext } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
+import { ThemeContext } from './ThemeContext';
 
 function App() {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <div className="container light">
+    <div className={`container ${theme}`}>
       <Navbar />
       <div className="main">
         <ul>

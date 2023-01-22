@@ -15,12 +15,32 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  color: #f08040;
+button {
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid #c0c0c0;
 }
 
 #root {
   height: 100vh;
+}
+
+.dark {
+  background-color: #202020;
+  color: #e0e0e0;
+}
+
+.dark button {
+  background-color: #202020;
+  color: #e0e0e0;
+}
+
+.dark a {
+  color: #40c0f0;
+}
+
+a:hover {
+  color: #f08040;
 }
 
 .light {
