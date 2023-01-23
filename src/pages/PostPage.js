@@ -18,7 +18,7 @@ const reducer = (state, action) => {
 
 export default function PostPage() {
   const { postId } = useParams();
-  const [state, dispatch] = useReducer(reducer, { loading: false, error: '', post: {} });
+  const [state, dispatch] = useReducer(reducer, { loading: false, error: '', post: { user: {} } });
   const { post, error, loading } = state;
 
   const fetchPost = async () => {
@@ -26,7 +26,9 @@ export default function PostPage() {
 
     try {
       const { data } = await axios.get(`http://jsonplaceholder.typicode.com/posts/${postId}`);
-      dispatch({ type: 'POST_SUCCESS', payload: data });
+      // Based on above request, we get the user details from the post
+      const { data: userData } = await axios.get(`http://jsonplaceholder.typicode.com/users/${data.userId}`);
+      dispatch({ type: 'POST_SUCCESS', payload: { ...data, user: userData } });
     } catch (err) {
       dispatch({ type: 'POST_FAILURE', payload: err.message });
     }
@@ -39,22 +41,32 @@ export default function PostPage() {
   return (
     <div>
       <Link to="/">Back to posts</Link>
-      <div className="blog">
-        <div className="content">
-          <h1>Posts</h1>
-          {loading ? (
-            <div>Loading...</div>
-          ) : error ? (
-            <div>Error: {error}</div>
-          ) : (
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <div className="blog">
+          <div className="content">
+            <h1>Posts</h1>
+
             <div>
               <h1>{post.title}</h1>
               <p>{post.body}</p>
             </div>
-          )}
+          </div>
+          <div className="sidebar">
+            <div>
+              <h2>{post.user.name}</h2>
+              <ul>
+                <li>Email: {post.user.email}</li>
+                <li>Phone: {post.user.phone}</li>
+                <li>Website: {post.user.website}</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="sidebar"></div>
-      </div>
+      )}
     </div>
   );
 }
