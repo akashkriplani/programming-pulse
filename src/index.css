@@ -28,9 +28,14 @@ a {
   text-decoration: none;
 }
 
+input,
+button {
+  font-size: 16px;
+  padding: 5px;
+}
+
 button {
   cursor: pointer;
-  padding: 5px;
   border: 1px solid #c0c0c0;
 }
 
