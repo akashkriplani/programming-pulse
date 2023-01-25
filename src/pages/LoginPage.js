@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeContext } from '../ThemeContext';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -18,12 +19,17 @@ const reducer = (state, action) => {
 export default function LoginPage() {
   const [state, dispatch] = useReducer(reducer, { loading: false, error: '', loggedInUser: null });
 
+  const { user, setUser } = useContext(ThemeContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { loading, error, loggedInUser } = state;
 
   const navigate = useNavigate();
+
+  if (user) {
+    navigate('/profile');
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,9 +49,10 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (loggedInUser) {
+      setUser(loggedInUser);
       navigate('/profile');
     }
-  }, [loggedInUser, navigate]);
+  }, [loggedInUser, navigate, setUser, user]);
 
   return (
     <div>

@@ -4,7 +4,7 @@ import { ThemeContext } from '../ThemeContext';
 
 export default function Navbar() {
   const [query, setQuery] = useState('');
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme, user } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -32,9 +32,20 @@ export default function Navbar() {
         </form>
       </div>
       <div className="header-item">
-        <NavLink to="/login" className={(navData) => (navData.isActive ? 'active' : '')}>
-          Login
-        </NavLink>
+        {user ? (
+          <>
+            <NavLink to="/profile" className={(navData) => (navData.isActive ? 'active' : '')}>
+              {user.name}
+            </NavLink>{' '}
+            <NavLink to="/create" className={(navData) => (navData.isActive ? 'active' : '')}>
+              Create Post
+            </NavLink>
+          </>
+        ) : (
+          <NavLink to="/login" className={(navData) => (navData.isActive ? 'active' : '')}>
+            Login
+          </NavLink>
+        )}{' '}
         <button onClick={toggleTheme}>{theme === 'light' ? 'Theme:light' : 'Theme:dark'}</button>
       </div>
     </div>

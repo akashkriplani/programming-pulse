@@ -6,6 +6,8 @@ import { ThemeContext } from './ThemeContext';
 import HomePage from './pages/HomePage';
 import PostPage from './pages/PostPage';
 import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -16,6 +18,10 @@ function App() {
         <Navbar />
         <div className="main">
           <Routes>
+            <Route exact path="/profile" element={<PrivateRoute />}>
+              <Route exact path="/profile" element={<ProfilePage />} />
+            </Route>
+            <Route path="/profile" element={<ProfilePage />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/post/:postId" element={<PostPage />}></Route>
             <Route path="/search/:query?" element={<HomePage />}></Route>
