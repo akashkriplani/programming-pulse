@@ -4,7 +4,7 @@ import { ThemeContext } from '../ThemeContext';
 
 export default function Navbar() {
   const [query, setQuery] = useState('');
-  const { theme, toggleTheme, user } = useContext(ThemeContext);
+  const { theme, toggleTheme, user, backendAPI, toggleBackendAPI } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -46,7 +46,8 @@ export default function Navbar() {
             Login
           </NavLink>
         )}{' '}
-        <button onClick={toggleTheme}>{theme === 'light' ? 'Theme:light' : 'Theme:dark'}</button>
+        <button onClick={toggleTheme}>{theme === 'light' ? 'Theme:Light' : 'Theme:Dark'}</button>{' '}
+        <button onClick={toggleBackendAPI}>{backendAPI === '/api' ? 'API:Real' : 'API:Mock'}</button>
       </div>
     </div>
   );

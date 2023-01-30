@@ -19,7 +19,7 @@ const reducer = (state, action) => {
 export default function LoginPage() {
   const [state, dispatch] = useReducer(reducer, { loading: false, error: '', loggedInUser: null });
 
-  const { user, setUser } = useContext(ThemeContext);
+  const { user, setUser, backendAPI } = useContext(ThemeContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch({ type: 'LOGIN_REQUEST' });
-    const { data } = await axios.get(`http://jsonplaceholder.typicode.com/users?email=${email}&password=${password}`);
+    const { data } = await axios.get(`${backendAPI}/users?email=${email}&password=${password}`);
 
     try {
       if (data.length > 0) {
@@ -52,7 +52,7 @@ export default function LoginPage() {
       setUser(loggedInUser);
       navigate('/profile');
     }
-  }, [loggedInUser, navigate, setUser, user]);
+  }, [loggedInUser, navigate, setUser, user, backendAPI]);
 
   return (
     <div>

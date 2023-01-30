@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
+import { ThemeContext } from '../ThemeContext';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,6 +25,7 @@ const reducer = (state, action) => {
 };
 
 export default function HomePage() {
+  const { backendAPI } = useContext(ThemeContext);
   const { query, userId } = useParams();
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
@@ -41,11 +43,7 @@ export default function HomePage() {
     dispatch({ type: 'POSTS_REQUEST' });
 
     try {
-      const { data } = await axios.get(
-        userId
-          ? `http://jsonplaceholder.typicode.com/posts?userId=${userId}`
-          : 'http://jsonplaceholder.typicode.com/posts'
-      );
+      const { data } = await axios.get(userId ? `${backendAPI}/posts?userId=${userId}` : `${backendAPI}/posts`);
 
       const filteredPosts = query
         ? data.filter((post) => post.title.indexOf(query) >= 0 || post.body.indexOf(query) >= 0)
@@ -60,9 +58,7 @@ export default function HomePage() {
     dispatch({ type: 'USERS_REQUEST' });
 
     try {
-      const { data } = await axios.get(
-        userId ? `http://jsonplaceholder.typicode.com/users/${userId}` : 'http://jsonplaceholder.typicode.com/users'
-      );
+      const { data } = await axios.get(userId ? `${backendAPI}/users/${userId}` : `${backendAPI}/users`);
       dispatch({ type: userId ? 'USER_SUCCESS' : 'USERS_SUCCESS', payload: data });
     } catch (err) {
       dispatch({ type: 'USERS_FAILURE', payload: err.message });
@@ -72,7 +68,7 @@ export default function HomePage() {
   useEffect(() => {
     loadPosts();
     loadUsers();
-  }, [query, userId]);
+  }, [query, userId, backendAPI]);
 
   return (
     <div className="blog">
