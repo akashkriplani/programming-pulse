@@ -25,10 +25,59 @@ const User = mongoose.model(
   })
 );
 
+const Post = mongoose.model(
+  'posts',
+  new mongoose.Schema(
+    {
+      id: Number,
+      title: String,
+      body: String,
+      userId: Number
+    },
+    { timestamps: true }
+  )
+);
+
 app.get('/api/users', async (req, res) => {
   const { email, password } = req.query;
   const users = await User.find(email && password ? { email, password } : {});
   res.send(users);
+});
+
+app.get('/api/users/:id', async (req, res) => {
+  const { id } = req.query;
+  const user = await User.findOne({ id });
+  if (user) {
+    res.send(user);
+  } else {
+    res.status(404).send({ message: 'User not found' });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  if (!req.body.name || !req.body.email || !req.body.password) {
+    return res.send({ message: 'Data is required. ' });
+  }
+  const user = new User(req.body);
+  const createdUser = await user.save();
+  res.send(createdUser);
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { email, name, phone, password, website } = req.body;
+  const user = await User.findOne({ id });
+  if (user) {
+    user.email = email;
+    user.name = name;
+    user.phone = phone;
+    user.password = password;
+    user.website = website;
+    const updatedUser = await user.save();
+    res.send(updatedUser);
+  } else {
+    res.status(404).send({ message: 'User not found' });
+  }
 });
 
 app.get('/api/seed', async (req, res) => {
@@ -44,7 +93,42 @@ app.get('/api/seed', async (req, res) => {
     }
   ]);
 
+  await Post.deleteMany();
+  await Post.insertMany([
+    {
+      id: 1,
+      title: 'Hello world',
+      body: 'Welcome to my blog',
+      userId: 1
+    }
+  ]);
+
   res.send({ message: 'Seeded successfully!' });
+});
+
+app.get('/api/posts', async (req, res) => {
+  const { userId } = req.query;
+  const posts = await Post.find(userId ? { userId } : {});
+  res.send(posts);
+});
+
+app.get('/api/posts/:id', async (req, res) => {
+  const { id } = req.query;
+  const post = await Post.findOne({ id });
+  if (post) {
+    res.send(post);
+  } else {
+    res.status(404).send({ message: 'Post not found' });
+  }
+});
+
+app.post('/api/posts', async (req, res) => {
+  if (!req.body.title || !req.body.body) {
+    return res.send({ message: 'Data is required. ' });
+  }
+  const post = new Post(req.body);
+  const createdPost = await post.save();
+  res.send(createdPost);
 });
 
 const port = process.env.PORT || 5001;
