@@ -38,6 +38,7 @@ export default function LoginPage() {
 
     try {
       if (data.length > 0) {
+        localStorage.setItem('user', JSON.stringify(data[0]));
         dispatch({ type: 'LOGIN_SUCCESS', payload: data[0] });
       } else {
         dispatch({ type: 'LOGIN_FAILURE', payload: 'Invalid email or password' });
