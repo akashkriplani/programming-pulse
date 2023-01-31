@@ -5,21 +5,22 @@ import { ThemeContext } from '../ThemeContext';
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN_REQUEST':
+    case 'REGISTER_REQUEST':
       return { ...state, loading: true };
-    case 'LOGIN_SUCCESS':
+    case 'REGISTER_SUCCESS':
       return { ...state, loading: false, error: '', loggedInUser: action.payload };
-    case 'LOGIN_FAILURE':
+    case 'REGISTER_FAILURE':
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [state, dispatch] = useReducer(reducer, { loading: false, error: '', loggedInUser: null });
 
   const { user, setUser, backendAPI } = useContext(ThemeContext);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,18 +34,19 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch({ type: 'LOGIN_REQUEST' });
+    dispatch({ type: 'REGISTER_REQUEST' });
 
     try {
-      const { data } = await axios.get(`${backendAPI}/users?email=${email}&password=${password}`);
-      if (data.length > 0) {
-        localStorage.setItem('user', JSON.stringify(data[0]));
-        dispatch({ type: 'LOGIN_SUCCESS', payload: data[0] });
-      } else {
-        dispatch({ type: 'LOGIN_FAILURE', payload: 'Invalid email or password' });
-      }
+      const { data } = await axios.post(`${backendAPI}/users`, {
+        name,
+        email,
+        password,
+        id: Math.floor(Math.random() * 1000000)
+      });
+      localStorage.setItem('user', JSON.stringify(data));
+      dispatch({ type: 'REGISTER_SUCCESS', payload: data });
     } catch (err) {
-      dispatch({ type: 'LOGIN_FAILURE', payload: err.message });
+      dispatch({ type: 'REGISTER_FAILURE', payload: err.message });
     }
   };
 
@@ -57,16 +59,20 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1>Login User</h1>
+      <h1>Register User</h1>
       <form onSubmit={handleSubmit} className="form">
+        <div className="form-item">
+          <label htmlFor="name">Name:</label>
+          <input type="text" name="name" id="name" value={name} required onChange={(e) => setName(e.target.value)} />
+        </div>
         <div className="form-item">
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
             id="email"
-            required
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -76,14 +82,14 @@ export default function LoginPage() {
             type="password"
             name="password"
             id="password"
-            required
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="form-item">
           <label></label>
-          <button>Login</button>
+          <button>Register</button>
         </div>
         {loading && (
           <div className="form-item">
@@ -100,12 +106,8 @@ export default function LoginPage() {
         <div className="form-item">
           <label></label>
           <span>
-            New User? <Link to="/register">Register</Link>
+            Already have an account? <Link to="/login">Login</Link>
           </span>
-        </div>
-        <div className="form-item">
-          <label></label>
-          <span>Or use email: Sincere@april.biz and password: 123</span>
         </div>
       </form>
     </div>

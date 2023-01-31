@@ -74,11 +74,11 @@ export default function ProfilePage() {
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-item">
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" id="name" name="name" value={name || ''} onChange={(e) => setName(e.target.value)} />
         </div>
         <div className="form-item">
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="email" id="email" name="email" value={email || ''} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="form-item">
           <label htmlFor="password">Password:</label>
@@ -86,17 +86,23 @@ export default function ProfilePage() {
             type="password"
             id="password"
             name="password"
-            value={password}
+            value={password || ''}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div className="form-item">
           <label htmlFor="phone">Phone:</label>
-          <input type="text" id="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <input type="text" id="phone" name="phone" value={phone || ''} onChange={(e) => setPhone(e.target.value)} />
         </div>
         <div className="form-item">
           <label htmlFor="website">Website:</label>
-          <input type="text" id="website" name="website" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          <input
+            type="text"
+            id="website"
+            name="website"
+            value={website || ''}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
         </div>
         <div className="form-item">
           <button>Update</button>

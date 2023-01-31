@@ -5,9 +5,10 @@ import Navbar from './components/Navbar';
 import { ThemeContext } from './ThemeContext';
 import CreatePostPage from './pages/CreatePostPage';
 import HomePage from './pages/HomePage';
-import PostPage from './pages/PostPage';
 import LoginPage from './pages/LoginPage';
+import PostPage from './pages/PostPage';
 import ProfilePage from './pages/ProfilePage';
+import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             </Route>
             <Route path="/profile" element={<ProfilePage />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
             <Route path="/post/:postId" element={<PostPage />}></Route>
             <Route path="/search/:query?" element={<HomePage />}></Route>
             <Route path="/user/:userId" element={<HomePage />}></Route>
