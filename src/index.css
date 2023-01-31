@@ -39,6 +39,10 @@ button {
   border: 1px solid #c0c0c0;
 }
 
+textarea {
+  min-height: 200px;
+}
+
 #root {
   height: 100vh;
 }

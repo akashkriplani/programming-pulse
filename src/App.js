@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import { ThemeContext } from './ThemeContext';
+import CreatePostPage from './pages/CreatePostPage';
 import HomePage from './pages/HomePage';
 import PostPage from './pages/PostPage';
 import LoginPage from './pages/LoginPage';
@@ -18,6 +19,9 @@ function App() {
         <Navbar />
         <div className="main">
           <Routes>
+            <Route exact path="/create" element={<PrivateRoute />}>
+              <Route exact path="/create" element={<CreatePostPage />} />
+            </Route>
             <Route exact path="/profile" element={<PrivateRoute />}>
               <Route exact path="/profile" element={<ProfilePage />} />
             </Route>
