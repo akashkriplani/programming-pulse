@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 const app = express();
@@ -129,6 +130,13 @@ app.post('/api/posts', async (req, res) => {
   const post = new Post(req.body);
   const createdPost = await post.save();
   res.send(createdPost);
+});
+
+// Add code for heroku deployment
+const dirname = path.resolve();
+app.use('/', express.static(dirname + '/build'));
+app.get('/', (req, res) => {
+  res.sendFile(dirname + '/build/index.html');
 });
 
 const port = process.env.PORT || 5001;
